@@ -100,12 +100,67 @@ describe('misc', function () {
     )
     Interval.almostEqual(n, [4, 6])
 
+    // issue #5
+    n = misc.difference(
+      Interval(0, 3),
+      Interval(0, 1)
+    )
+    assert(n.lo > 1)
+    assert(n.hi === 3)
+
+    n = misc.difference(
+      Interval(0, 3),
+      Interval(1, 3)
+    )
+    assert(n.lo === 0)
+    assert(n.hi < 1)
+
+    n = misc.difference(
+      Interval(0, 3),
+      Interval(0, 3)
+    )
+    assert(Interval.isEmpty(n))
+
+    n = misc.difference(
+      Interval(0, 1),
+      constants.EMPTY
+    )
+    assert(n.lo === 0)
+    assert(n.hi === 1)
+
+    n = misc.difference(
+      Interval(0, 1),
+      constants.WHOLE
+    )
+    assert(Interval.isEmpty(n))
+
+    // # 9
+    n = misc.difference(
+      Interval(0, Infinity),
+      Interval(0, Infinity)
+    )
+    assert(Interval.isEmpty(n))
+    n = misc.difference(
+      Interval(-Infinity, 0),
+      Interval(-Infinity, 0)
+    )
+    assert(Interval.isEmpty(n))
+    n = misc.difference(
+      Interval(-Infinity, 0),
+      constants.WHOLE
+    )
+    assert(Interval.isEmpty(n))
+    n = misc.difference(
+      constants.WHOLE,
+      constants.WHOLE
+    )
+    assert(Interval.isEmpty(n))
+
     var a = Interval(3, nextafter(5, -Infinity))
     var b = Interval(4, 6)
     n = Interval.difference(a, b)
     assert(n.lo === 3)
     assert(n.hi < 4)
-
     n = Interval.difference(b, a)
     assert(n.lo === 5)
     assert(n.hi === 6)
@@ -130,6 +185,10 @@ describe('misc', function () {
   it('should compute the max value of two intervals', function () {
     n = misc.max(new Interval(-1, 1), new Interval(5, 7))
     Interval.almostEqual(n, [5, 7])
+    n = misc.max(Interval.EMPTY, Interval(-1, 1))
+    Interval.almostEqual(n, [-1, 1])
+    n = misc.max(Interval(-1, 1), Interval.EMPTY)
+    Interval.almostEqual(n, [-1, 1])
   })
 
   it('should compute the min value of two intervals', function () {
@@ -140,6 +199,8 @@ describe('misc', function () {
   it('should clone an interval', function () {
     var x = new Interval(0, 1)
     Interval.equal(Interval.clone(x), x)
+    x = Interval.clone(Interval.EMPTY)
+    assert(Interval.isEmpty(x))
   })
 
   it('should compute complex operations', function () {
