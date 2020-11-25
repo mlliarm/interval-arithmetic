@@ -1,17 +1,14 @@
-# interval-arithmetic 
+# interval-arithmetic
 
 [![NPM][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url] 
-[![Codecov Status][codecov-image]][codecov-url]
+[![Build Status][travis-image]][travis-url]
+[![codecov](https://codecov.io/gh/mauriciopoppe/interval-arithmetic/branch/master/graph/badge.svg)](https://codecov.io/gh/mauriciopoppe/interval-arithmetic)
 [![Dependency Status][david-image]][david-url]
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://github.com/feross/standard)
 [![Stability](https://img.shields.io/badge/stability-stable-green.svg)](https://nodejs.org/api/documentation.html#apicontent)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmauriciopoppe%2Finterval-arithmetic.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmauriciopoppe%2Finterval-arithmetic?ref=badge_shield)
 
 > An implementation of an algebraically closed interval system of the extended real number set
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Description](#description)
   - [floating point operations](#floating-point-operations)
@@ -22,12 +19,11 @@
 - [API](#api)
 - [Development](#development)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Description
 
-An `interval` is a pair of numbers which represents all the numbers between them, `closed` 
-means that the bounds are also included in the representation, `extended real` because the 
+An `interval` is a pair of numbers which represents all the numbers between them, `closed`
+means that the bounds are also included in the representation, `extended real` because the
 `real number system` is extended with two elements: `-∞` and `+∞` representing negative infinity
 and positive infinity respectively.
 
@@ -57,7 +53,7 @@ decimals that will be lost due to the nature of floating point, instead we can r
 number with the interval `[0.2, 0.4]`, with this interval we're completely sure that `1 / 3` is within
 the interval (although the interval is also representing many more numbers), to improve the `scope`
 of the interval we have to understand that numbers in JavaScript are represented with 64 bits,
-therefore to get the next floating point number of a single precision number the last bit 
+therefore to get the next floating point number of a single precision number the last bit
 needs to be incremented to get the upper bound, and the last bit also needs to be decremented
 to get the lower point
 
@@ -80,7 +76,7 @@ Interval.add(new Interval(1, 1), new Interval(2, 2))
 This gets worse when the expression to be evaluated becomes complex like `sin(exp(x)) + tan(x) - 1/cos(PI) * [1, 3]^2`:
 
 ```javascript
-var x = Interval(0, 1);
+const x = Interval(0, 1);
 Interval.add(
   Interval.sin(Interval.exp(x)),
   Interval.sub(
@@ -97,14 +93,19 @@ To avoid this 'expressiveness' mess there's an [interval arithmetic evaluator mo
 which I've created to deal with all the work of parsing/evaluating expressions like the one above
 
 ```javascript
-var compile = require('interval-arithmetic-eval');
+const compile = require('interval-arithmetic-eval');
 compile('sin(exp(x)) + tan(x) - 1/cos(PI) * [1, 3]^2').eval({ x: [0, 1] })
 ```
 
-## Installation
+## Installation & Usage
 
 ```sh
 $ npm install --save interval-arithmetic
+```
+
+```js
+import IOps, { Interval } from 'interval-arithmetic'
+IOps.add(Interval(1), Interval(2))
 ```
 
 ## API
@@ -114,26 +115,33 @@ See the [homepage](http://mauriciopoppe.github.io/interval-arithmetic/)
 ## Development
 
 ```sh
-npm start
+npm test
 ```
 
-Deploy steps
+Deployment steps
 
 ```sh
 // after the working directory is clean
-(optional) npm version (major|minor|patch)
-npm run deploy
+npm test
+npm run build
+npm version (major|minor|patch)
+git push origin master
+
 // if everything went well
 npm publish
+npm run deploy
 ```
 
-2015 © Mauricio Poppe
+
+2015-2020 © Mauricio Poppe
 
 [npm-image]: https://img.shields.io/npm/v/interval-arithmetic.svg?style=flat
 [npm-url]: https://npmjs.org/package/interval-arithmetic
 [travis-image]: https://travis-ci.org/mauriciopoppe/interval-arithmetic.svg?branch=master
 [travis-url]: https://travis-ci.org/mauriciopoppe/interval-arithmetic
-[codecov-url]: https://codecov.io/github/mauriciopoppe/interval-arithmetic
-[codecov-image]: https://img.shields.io/codecov/c/github/mauriciopoppe/interval-arithmetic.svg?style=flat
 [david-image]: https://david-dm.org/mauriciopoppe/interval-arithmetic.svg
 [david-url]: https://david-dm.org/mauriciopoppe/interval-arithmetic
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmauriciopoppe%2Finterval-arithmetic.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmauriciopoppe%2Finterval-arithmetic?ref=badge_large)
